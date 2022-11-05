@@ -59,7 +59,7 @@ main cpp에다가 모두 담지 않고 시계 객체, 바늘 객체, 버튼 객�
 
 > Clock.h
 
-```
+``` cpp
 #pragma once
 #include "framework.h"
 #include "Define.h"
@@ -112,7 +112,7 @@ private:
 
 > 생성시 (생성자, 초기화 함수)
 
-```
+``` cpp
 Clock::Clock() : m_radius(0), m_position{}
 {}
 
@@ -141,7 +141,7 @@ void Clock::Init()
 
 > 그리기 (Render)
 
-```
+``` cpp
 void Clock::RenderClock(SYSTEMTIME time, HDC hdc)
 {
 	RenderCircle(hdc);
@@ -196,7 +196,7 @@ void Clock::RenderSecond(SYSTEMTIME time, HDC hdc)
 
 초침과 분침같은 경우에는 각 초와 분이 1, 2, 3일 때 시곗바늘의 방향 또한 같아서 코드가 똑같다. 각 초와 분이 1씩 늘어날 때마다 각도는 360/60 = **6**씩 오르게 된다. 
 
-```
+``` cpp
  sin(DEG2RAD * time.wSecond * 6);
 -cos(DEG2RAD * time.wSecond * 6);
 ```
@@ -205,7 +205,7 @@ void Clock::RenderSecond(SYSTEMTIME time, HDC hdc)
 
 시침은 조금 다른데, 일단 시간에 따른 방향만 보면, 시가 1씩 늘어날 때마다 360/12 = **30**씩 오른다.
 
-```
+``` cpp
  sin(DEG2RAD * ((double)time.wHour * 30);
 -cos(DEG2RAD * ((double)time.wHour * 30);
 ```
@@ -214,7 +214,7 @@ void Clock::RenderSecond(SYSTEMTIME time, HDC hdc)
 
 분이 1씩 늘어나면 각도는 30/60씩 늘어나게 되므로...
 
-```
+``` cpp
  sin(DEG2RAD * ((double)time.wHour * 30 + time.wMinute / 2));
 -cos(DEG2RAD * ((double)time.wHour * 30 + time.wMinute / 2));
 ```
@@ -223,7 +223,7 @@ void Clock::RenderSecond(SYSTEMTIME time, HDC hdc)
 
 > 눈금 출력
 
-```
+``` cpp
 void Clock::RenderGraduation(HDC hdc)
 {
 	float radius = this->m_radius + 15;
@@ -253,7 +253,7 @@ void Clock::RenderGraduation(HDC hdc)
 
 **여기 또한 삼각함수가 들어간다.**
 
-```
+``` cpp
 POINT startPos = { m_position.x + x * radius,	 m_position.y + y * radius };
 POINT endPos = { startPos.x - x * len, startPos.y - y * len};
 ```
@@ -266,7 +266,7 @@ POINT endPos = { startPos.x - x * len, startPos.y - y * len};
 
 len만큼 startpoint에서 역방향으로 간 점이 end point이다.
 
-```
+``` cpp
 // 시계 숫자 출력
 void Clock::RenderNumber(HDC hdc)
 {
@@ -299,7 +299,7 @@ void Clock::RenderNumber(HDC hdc)
 
 > 원 출력
 
-```
+``` cpp
 void Clock::RenderCircle(HDC hdc)
 {
 	HBRUSH hBrush = CreateSolidBrush(STROKE_COLOR);
@@ -327,7 +327,7 @@ void Clock::RenderCircle(HDC hdc)
 
 > 소리 출력
 
-```
+``` cpp
 void Clock::PlaySound(SYSTEMTIME time)
 {
 	if (m_clockState & SOUND)
@@ -351,7 +351,7 @@ void Clock::PlaySound(SYSTEMTIME time)
 
 > Hand.h
 
-```
+``` cpp
 #pragma once
 #include "framework.h"
 
@@ -375,7 +375,7 @@ public:
 
 > Hand.cpp
 
-```
+``` cpp
 #include "Hand.h"
 #include "Define.h"
 
@@ -425,7 +425,7 @@ ClockToggle을 관리하는 ToggleManager로 구성된다.
 
 > Button.h
 
-```
+``` cpp
 #pragma once
 #include "Clock.h"
 
@@ -462,7 +462,7 @@ private:
 
 > Button.cpp
 
-```
+``` cpp
 Button::Button() : Button(RGB(0, 0, 0), {}, { 20,15 })
 {
 }
@@ -491,7 +491,7 @@ void Button::SetRect()
 
 > 마우스 충돌, Down을 처리
 
-```
+``` cpp
 void Button::Update(HWND hWnd)
 {
 	POINT mousePoint;
@@ -517,7 +517,7 @@ PtInRect로 버튼과 마우스 포인트의 충돌을 감지한다.
 
 > Button Render
 
-```
+``` cpp
 void Button::Render(HDC hdc)
 {
 	// 더블 버퍼링
@@ -549,7 +549,7 @@ void Button::Render(HDC hdc)
 
 > ClockToggle.h
 
-```
+``` cpp
 #pragma once
 #include "Button.h"
 #include "Clock.h"
@@ -575,7 +575,7 @@ public:
 
 > ClockToggle.cpp
 
-```
+``` cpp
 #pragma once
 #include "ClockToggle.h"
 
@@ -626,7 +626,7 @@ void ClockToggle::Render(HDC hdc)
 
 > ToggleManager.h
 
-```
+``` cpp
 #pragma once
 #include "framework.h"
 
@@ -652,7 +652,7 @@ private:
 
 > ToggleManager.cpp
 
-```
+``` cpp
 #include "ToggleManager.h"
 #include "ClockToggle.h"
 #include "Define.h"
@@ -704,7 +704,7 @@ void ToggleManager::Release()
 
 > Game.h
 
-```
+``` cpp
 #pragma once
 #include "Clock.h"
 #include "ClockToggle.h"
@@ -740,7 +740,7 @@ public:
 
 > Game.cpp
 
-```
+``` cpp
 #include "Game.h"
 #include "Define.h"
 #include "ToggleManager.h"
@@ -806,7 +806,7 @@ void Game::UpdatePerSec()
 
 #### **2\. 메인에서 게임 객체 호출**
 
-```
+``` cpp
 #include "framework.h"
 #include "AnalogueClock.h"
 #include "Define.h"
